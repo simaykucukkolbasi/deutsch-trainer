@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}</style>
+<title>A2 Deutsch-Trainer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: single phone-width column; sticky tab bar; one card per exercise. Article colors follow the learner convention der=blue, die=red, das=green. */
+:root{
+  --bg:#eef1f4; --surface:#ffffff; --fg:#1b2430; --muted:#5d6a7a; --line:#d5dbe3;
+  --accent:#3b5bdb; --accent-ink:#ffffff;
+  --der:#2f6fd6; --die:#d6453a; --das:#2e9a5a;
+  --ok:#2e9a5a; --bad:#d6453a; --okbg:#e3f4ea; --badbg:#fbe6e4;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121821; --surface:#1b2330; --fg:#e7ecf3; --muted:#9aa7b8; --line:#2c3746;
+  --accent:#7b94ff; --accent-ink:#0f1420;
+  --der:#6aa1ff; --die:#ff7a6e; --das:#5fcf8c;
+  --ok:#5fcf8c; --bad:#ff7a6e; --okbg:#173326; --badbg:#3a1e1c; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121821; --surface:#1b2330; --fg:#e7ecf3; --muted:#9aa7b8; --line:#2c3746;
+  --accent:#7b94ff; --accent-ink:#0f1420;
+  --der:#6aa1ff; --die:#ff7a6e; --das:#5fcf8c;
+  --ok:#5fcf8c; --bad:#ff7a6e; --okbg:#173326; --badbg:#3a1e1c; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:560px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px;display:flex;flex-direction:column;gap:16px}
+header h1{font-family:var(--display);font-weight:800;font-size:1.75rem;margin:0;letter-spacing:-.01em}
+header p{margin:2px 0 0;color:var(--muted);font-size:.9rem}
+.dots{display:flex;gap:6px;margin-top:10px}
+.dots span{font:700 .72rem/1 var(--body);letter-spacing:.06em;text-transform:uppercase;padding:4px 7px;border-radius:4px;color:var(--accent-ink)}
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding-block:6px}
+.tabs button,.chip{font:700 .95rem var(--body);border:1.5px solid var(--line);background:var(--surface);color:var(--fg);border-radius:10px;padding:10px 6px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chip{padding:6px 12px;font-size:.85rem;border-radius:999px}
+.chip[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
+.label{font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.word{font-family:var(--display);font-weight:600;font-size:2.2rem;line-height:1.1;text-wrap:balance;overflow-wrap:anywhere}
+.sub{color:var(--muted)}
+.btns{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(90px,1fr))}
+.btn{font:700 1.05rem var(--body);padding:13px 10px;border-radius:10px;border:2px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer;text-align:center}
+.btn:focus-visible,.chip:focus-visible,.tabs button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.btn.der{border-color:var(--der);color:var(--der)} .btn.die{border-color:var(--die);color:var(--die)} .btn.das{border-color:var(--das);color:var(--das)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.right{background:var(--okbg);border-color:var(--ok);color:var(--fg)} .btn.wrong{background:var(--badbg);border-color:var(--bad);color:var(--fg)}
+.btn:disabled{cursor:default}
+.feedback{border-radius:10px;padding:12px 14px;font-size:.95rem}
+.feedback.ok{background:var(--okbg)} .feedback.no{background:var(--badbg)}
+.feedback b{display:block;margin-bottom:2px}
+.art-der{color:var(--der)} .art-die{color:var(--die)} .art-das{color:var(--das)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.speak{border:none;background:none;color:var(--accent);font:700 .9rem var(--body);cursor:pointer;padding:4px}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);transition:width .3s}
+.sentence{font-size:1.25rem;line-height:1.45}
+.gap{display:inline-block;min-width:3.5em;border-bottom:2px solid var(--accent);text-align:center;font-weight:700}
+input[type=text]{font:1.15rem var(--body);padding:12px;border-radius:10px;border:2px solid var(--line);background:var(--bg);color:var(--fg);width:100%;box-sizing:border-box}
+.tiles{display:flex;flex-wrap:wrap;gap:8px;min-height:48px;padding:10px;border-radius:10px;background:var(--bg)}
+.tile{font:700 1rem var(--body);padding:8px 12px;border-radius:8px;border:1.5px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer}
+.boxes{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;text-align:center;font-variant-numeric:tabular-nums}
+.boxes div{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 2px}
+.boxes strong{display:block;font-family:var(--display);font-size:1.3rem}
+.boxes small{color:var(--muted);font-size:.7rem}
+.done{text-align:center}
+.done .word{font-size:2.6rem}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <h1>A2 Deutsch-Trainer</h1>
+    <p id="subtitle">Wörter, Grammatik, Satzbau</p>
+    <div class="dots"><span style="background:var(--der)">der</span><span style="background:var(--die)">die</span><span style="background:var(--das)">das</span></div>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" id="t-words" aria-selected="true" data-tab="words">Wörter</button>
+    <button role="tab" id="t-gram" aria-selected="false" data-tab="gram">Grammatik</button>
+    <button role="tab" id="t-order" aria-selected="false" data-tab="order">Satzbau</button>
+  </nav>
+
+  <div class="row" id="chapters" aria-label="Kapitel">
+    <span class="label">Kapitel</span>
+  </div>
+
+  <div id="topics" class="row" hidden></div>
+
+  <main id="stage"></main>
+
+  <section id="stats" class="card" aria-label="Fortschritt">
+    <div class="label">Lernkasten · words by box</div>
+    <div class="boxes" id="boxes"></div>
+    <div class="sub" style="font-size:.85rem">Right answer moves a word up a box. A mistake sends it back to box 1, so it comes back sooner. Progress is saved in this browser.</div>
+  </section>
+</div>
+
+<script>
+// ---------- DATA ----------
+// To add a new week: add the chapter here, then add its items to NOUNS, GRAM and ORDER with that chapter number.
+const CHAPTERS = {
+ 1:"Und was machst du?",
+ 2:"Nach der Schulzeit"
+};
+
+// Nouns: [article, singular, plural ('' = no plural), English, chapter]
+const NOUNS = [
+ ["die","Freizeit","","free time",1],["das","Hobby","die Hobbys","hobby",1],["der","Verein","die Vereine","club, association",1],
+ ["die","Mannschaft","die Mannschaften","team",1],["das","Training","die Trainings","training session",1],["der","Ausflug","die Ausflüge","day trip",1],
+ ["das","Konzert","die Konzerte","concert",1],["die","Verabredung","die Verabredungen","date, appointment (with friends)",1],
+ ["das","Restaurant","die Restaurants","restaurant",1],["die","Speisekarte","die Speisekarten","menu",1],["der","Kellner","die Kellner","waiter",1],
+ ["die","Kellnerin","die Kellnerinnen","waitress",1],["die","Vorspeise","die Vorspeisen","starter",1],["das","Hauptgericht","die Hauptgerichte","main course",1],
+ ["die","Nachspeise","die Nachspeisen","dessert",1],["das","Getränk","die Getränke","drink",1],["die","Rechnung","die Rechnungen","bill",1],
+ ["das","Trinkgeld","die Trinkgelder","tip",1],["der","Gast","die Gäste","guest",1],["die","Küche","die Küchen","kitchen; cuisine",1],
+ ["die","Schule","die Schulen","school",2],["die","Schulzeit","","school years",2],["das","Schulfach","die Schulfächer","school subject",2],
+ ["der","Stundenplan","die Stundenpläne","timetable",2],["der","Unterricht","","lessons, teaching",2],["die","Pause","die Pausen","break",2],
+ ["die","Note","die Noten","grade, mark",2],["das","Zeugnis","die Zeugnisse","school report",2],["die","Prüfung","die Prüfungen","exam",2],
+ ["die","Hausaufgabe","die Hausaufgaben","homework task",2],["die","Klasse","die Klassen","class; grade year",2],["die","Klassenfahrt","die Klassenfahrten","school trip",2],
+ ["der","Lehrer","die Lehrer","teacher (m)",2],["die","Lehrerin","die Lehrerinnen","teacher (f)",2],["die","Grundschule","die Grundschulen","primary school",2],
+ ["das","Gymnasium","die Gymnasien","academic secondary school",2],["das","Abitur","","school-leaving exam (for university)",2],
+ ["der","Abschluss","die Abschlüsse","qualification, diploma",2],["die","Ausbildung","die Ausbildungen","vocational training",2],
+ ["die","Erfahrung","die Erfahrungen","experience",2],["die","Erdkunde","","geography",2],["die","Geschichte","die Geschichten","history; story",2],
+ ["die","Kunst","die Künste","art",2],["der","Sport","","sport, PE",2],["das","Lieblingsfach","die Lieblingsfächer","favourite subject",2]
+];
+
+// Grammar items. type: mc | type
+const GRAM = [
+ // Perfekt
+ {ch:1,topic:"Perfekt",type:"mc",q:"Am Samstag ___ ich mit Freunden ins Kino gegangen.",opts:["bin","habe"],a:"bin",why:"gehen = movement from A to B → sein."},
+ {ch:1,topic:"Perfekt",type:"mc",q:"Wir ___ im Restaurant Pizza gegessen.",opts:["sind","haben"],a:"haben",why:"essen has an object, no movement → haben."},
+ {ch:1,topic:"Perfekt",type:"mc",q:"Lena ___ gestern lange geschlafen.",opts:["ist","hat"],a:"hat",why:"schlafen → haben. Most verbs take haben."},
+ {ch:1,topic:"Perfekt",type:"mc",q:"Der Zug ___ pünktlich angekommen.",opts:["ist","hat"],a:"ist",why:"ankommen = change of place → sein."},
+ {ch:1,topic:"Perfekt",type:"mc",q:"Was ___ am Wochenende passiert?",opts:["ist","hat"],a:"ist",why:"passieren takes sein (like bleiben, werden, sein)."},
+ {ch:1,topic:"Perfekt",type:"mc",q:"Ich ___ zu Hause geblieben.",opts:["bin","habe"],a:"bin",why:"bleiben is an exception: it takes sein."},
+ {ch:1,topic:"Perfekt",type:"type",q:"Ich habe einen Tisch ___ . (reservieren)",a:"reserviert",why:"Verbs ending in -ieren: no ge-. reservieren → reserviert."},
+ {ch:1,topic:"Perfekt",type:"type",q:"Hast du schon ___ ? (bezahlen)",a:"bezahlt",why:"Inseparable prefix be-: no ge-. bezahlen → bezahlt."},
+ {ch:1,topic:"Perfekt",type:"type",q:"Wir haben Getränke ___ . (bestellen)",a:"bestellt",why:"Inseparable prefix be-: bestellen → bestellt."},
+ {ch:1,topic:"Perfekt",type:"type",q:"Er hat seine Freundin ___ . (anrufen)",a:"angerufen",why:"Separable verb: ge- goes in the middle. an-ge-rufen."},
+ {ch:1,topic:"Perfekt",type:"type",q:"Ich habe Kuchen ___ . (mitbringen)",a:"mitgebracht",why:"Separable + irregular: mit-ge-bracht."},
+ {ch:1,topic:"Perfekt",type:"type",q:"Sie ist nach Graz ___ . (fahren)",a:"gefahren",why:"fahren → ist gefahren."},
+ // Genitiv Name + s
+ {ch:1,topic:"Genitiv",type:"mc",q:"Das ist ___ Fahrrad.",opts:["Annas","Anna's","von Annas"],a:"Annas",why:"Name + s, without an apostrophe: Annas Fahrrad."},
+ {ch:1,topic:"Genitiv",type:"mc",q:"___ Bruder spielt Fußball im Verein.",opts:["Max'","Maxs","Max's"],a:"Max'",why:"Names ending in -s, -x, -z, -ß take only an apostrophe: Max' Bruder."},
+ {ch:1,topic:"Genitiv",type:"mc",q:"Kennst du ___ Restaurant?",opts:["Tims","Tim","Tim's"],a:"Tims",why:"Tim + s → Tims Restaurant."},
+ // Modalverben Präteritum
+ {ch:2,topic:"Modalverben",type:"mc",q:"Früher ___ ich jeden Tag Hausaufgaben machen.",opts:["musste","muss","müsste"],a:"musste",why:"müssen → musste (no Umlaut in Präteritum)."},
+ {ch:2,topic:"Modalverben",type:"mc",q:"Als Kind ___ ich nicht schwimmen.",opts:["konnte","könnte","kann"],a:"konnte",why:"können → konnte. (könnte is Konjunktiv II, Kapitel 5.)"},
+ {ch:2,topic:"Modalverben",type:"mc",q:"Wir ___ in der Pause nicht nach draußen gehen.",opts:["durften","dürften","darften"],a:"durften",why:"dürfen → durfte, wir durften."},
+ {ch:2,topic:"Modalverben",type:"mc",q:"Mein Bruder ___ immer Lehrer werden.",opts:["wollte","willte","wollt"],a:"wollte",why:"wollen → wollte."},
+ {ch:2,topic:"Modalverben",type:"mc",q:"Ich ___ Mathe nicht. Ich fand es langweilig.",opts:["mochte","möchte","mögte"],a:"mochte",why:"mögen → mochte. möchte means 'would like'."},
+ {ch:2,topic:"Modalverben",type:"mc",q:"Ihr ___ das Gedicht auswendig lernen.",opts:["solltet","sollten","solltest"],a:"solltet",why:"ihr-form: Stamm + -te + -t → ihr solltet."},
+ {ch:2,topic:"Modalverben",type:"type",q:"Du ___ damals keine Uniform tragen. (müssen)",a:"musstest",why:"du + Präteritum: musst + est → du musstest."},
+ {ch:2,topic:"Modalverben",type:"type",q:"Sie (plural) ___ sehr gut Englisch sprechen. (können)",a:"konnten",why:"sie/Sie → konnten."},
+ // Possessivartikel Dativ
+ {ch:2,topic:"Possessiv Dativ",type:"mc",q:"Ich fahre mit ___ Bruder zur Schule.",opts:["meinem","meiner","meinen"],a:"meinem",why:"mit + Dativ; der Bruder → meinem (m)."},
+ {ch:2,topic:"Possessiv Dativ",type:"mc",q:"Sie hat mit ___ Lehrerin gesprochen.",opts:["ihrer","ihrem","ihren"],a:"ihrer",why:"die Lehrerin → Dativ feminine ending -er: ihrer."},
+ {ch:2,topic:"Possessiv Dativ",type:"mc",q:"Er wohnt noch bei ___ Eltern.",opts:["seinen","seinem","seiner"],a:"seinen",why:"Plural Dativ: -en, and the noun gets -n too: seinen Eltern."},
+ {ch:2,topic:"Possessiv Dativ",type:"mc",q:"Wir haben ___ Kind ein Buch geschenkt.",opts:["unserem","unserer","unseren"],a:"unserem",why:"das Kind → neuter Dativ = -em: unserem."},
+ {ch:2,topic:"Possessiv Dativ",type:"mc",q:"Was schenkst du ___ Schwester?",opts:["deiner","deinem","deinen"],a:"deiner",why:"die Schwester → deiner."},
+ {ch:2,topic:"Possessiv Dativ",type:"type",q:"Ich lerne mit ___ Freundin. (mein)",a:"meiner",why:"die Freundin → Dativ feminine: meiner."},
+ {ch:2,topic:"Possessiv Dativ",type:"type",q:"Kommst du aus ___ Zimmer? (dein)",a:"deinem",why:"aus + Dativ, das Zimmer → deinem."},
+ // Artikel Wiederholung (Akk/Dat)
+ {ch:2,topic:"Artikel",type:"mc",q:"Ich habe ___ Prüfung bestanden.",opts:["die","der","den"],a:"die",why:"Akkusativ feminine stays die."},
+ {ch:2,topic:"Artikel",type:"mc",q:"Nach ___ Unterricht gehe ich nach Hause.",opts:["dem","den","der"],a:"dem",why:"nach + Dativ; der Unterricht → dem."},
+ {ch:2,topic:"Artikel",type:"mc",q:"Ich brauche ___ Stundenplan.",opts:["den","der","dem"],a:"den",why:"Akkusativ masculine: der → den."}
+];
+
+// Word order: correct sentence as tokens; comma kept with the token before
+const ORDER = [
+ {ch:1,de:"Ich lerne Deutsch, weil ich in Wien wohne.",en:"I learn German because I live in Vienna."},
+ {ch:1,de:"Ich komme nicht mit, weil ich keine Zeit habe.",en:"I'm not coming because I have no time."},
+ {ch:1,de:"Wir gehen ins Restaurant, weil wir Hunger haben.",en:"We're going to a restaurant because we're hungry."},
+ {ch:1,de:"Sie ist müde, weil sie lange gearbeitet hat.",en:"She is tired because she worked for a long time."},
+ {ch:1,de:"Er spielt im Verein, weil er Fußball liebt.",en:"He plays in a club because he loves football."},
+ {ch:1,de:"Am Wochenende habe ich meine Freunde getroffen.",en:"At the weekend I met my friends."},
+ {ch:1,de:"Gestern sind wir ins Kino gegangen.",en:"Yesterday we went to the cinema."},
+ {ch:2,de:"Ich mochte Mathe nicht, weil der Lehrer streng war.",en:"I didn't like maths because the teacher was strict."},
+ {ch:2,de:"Früher musste ich um sieben Uhr aufstehen.",en:"I used to have to get up at seven."},
+ {ch:2,de:"Als Kind konnte ich nicht gut schwimmen.",en:"As a child I couldn't swim well."},
+ {ch:2,de:"Ich habe mit meiner Lehrerin gesprochen.",en:"I spoke with my teacher."},
+ {ch:2,de:"Er war froh, weil er das Abitur bestanden hat.",en:"He was happy because he passed the Abitur."}
+];
+
+// ---------- STATE ----------
+const KEY="a2trainer-v1";
+const CH_IDS=Object.keys(CHAPTERS).map(Number);
+let store={boxes:{},chapters:CH_IDS.slice(),seen:CH_IDS.slice()};
+try{const s=JSON.parse(localStorage.getItem(KEY)||"null"); if(s) store=Object.assign(store,s);}catch(e){}
+// Chapters added since this browser's last visit start switched on; removed ones are dropped
+const fresh=CH_IDS.filter(c=>!(store.seen||[1,2]).includes(c));
+store.chapters=[...new Set([...store.chapters,...fresh])].filter(c=>CH_IDS.includes(c));
+if(!store.chapters.length) store.chapters=CH_IDS.slice();
+store.seen=CH_IDS.slice(); save();
+function save(){try{localStorage.setItem(KEY,JSON.stringify(store))}catch(e){}}
+let tab="words", gramTopic="Alle";
+
+const $=s=>document.querySelector(s);
+const stage=$("#stage");
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const norm=s=>s.trim().toLowerCase().replace(/\s+/g," ").replace(/[.!?]$/,"");
+const inCh=x=>store.chapters.includes(x.ch??x[4]);
+
+let voice=null;
+function pickVoice(){try{const v=speechSynthesis.getVoices();voice=v.find(x=>/^de/i.test(x.lang))||null}catch(e){}}
+try{pickVoice();speechSynthesis.onvoiceschanged=pickVoice}catch(e){}
+function say(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="de-DE";if(voice)u.voice=voice;u.rate=.9;speechSynthesis.speak(u)}catch(e){}}
+
+// ---------- WORDS (Leitner) ----------
+const boxOf=n=>store.boxes[n[1]]||1;
+let session=[], si=0, score=0;
+function startWords(){
+  const pool=NOUNS.filter(inCh);
+  // weight: lower boxes first, random within box
+  session=shuffle(pool).sort((a,b)=>boxOf(a)-boxOf(b)).slice(0,10);
+  session=shuffle(session); si=0; score=0; renderWord();
+}
+function progress(i,n){return `<div class="bar" aria-hidden="true"><i style="width:${(i/n)*100}%"></i></div>`}
+function renderWord(){
+  if(si>=session.length) return renderDone(startWords,"Neue Runde");
+  const n=session[si];
+  stage.innerHTML=`<div class="card">
+    ${progress(si,session.length)}
+    <div class="top"><span class="label">Wort ${si+1} / ${session.length} · Box ${boxOf(n)}</span><button class="speak" id="sp">▶ Hören</button></div>
+    <div class="word">${esc(n[1])}</div>
+    <div class="sub">der, die oder das?</div>
+    <div class="btns">${["der","die","das"].map(a=>`<button class="btn ${a}" data-a="${a}">${a}</button>`).join("")}</div>
+    <div id="fb"></div></div>`;
+  $("#sp").onclick=()=>say(n[0]+" "+n[1]);
+  stage.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{
+    const ok=b.dataset.a===n[0];
+    stage.querySelectorAll("[data-a]").forEach(x=>{x.disabled=true;if(x.dataset.a===n[0])x.classList.add("right");else if(x===b)x.classList.add("wrong")});
+    store.boxes[n[1]]=ok?Math.min(5,boxOf(n)+1):1; save(); renderBoxes();
+    if(ok)score++;
+    say(n[0]+" "+n[1]);
+    $("#fb").innerHTML=`<div class="feedback ${ok?"ok":"no"}"><b>${ok?"Richtig!":"Nicht ganz."} <span class="art-${n[0]}">${n[0]}</span> ${esc(n[1])}</b>
+      Plural: ${n[2]?esc(n[2]):"kein Plural"} · ${esc(n[3])}</div>
+      <button class="btn primary" id="nx" style="margin-top:10px;width:100%">Weiter</button>`;
+    $("#nx").onclick=()=>{si++;renderWord()}; $("#nx").focus();
+  });
+}
+
+// ---------- GRAMMAR ----------
+let gq=[], gi=0;
+function topicsFor(){return ["Alle",...new Set(GRAM.filter(inCh).map(g=>g.topic))]}
+function renderTopics(){
+  const t=$("#topics"); t.hidden=tab!=="gram"; if(t.hidden)return;
+  const list=topicsFor(); if(!list.includes(gramTopic))gramTopic="Alle";
+  t.innerHTML=`<span class="label">Thema</span>`+list.map(x=>`<button class="chip" data-t="${x}" aria-pressed="${x===gramTopic}">${x}</button>`).join("");
+  t.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{gramTopic=b.dataset.t;renderTopics();startGram()});
+}
+function startGram(){
+  gq=shuffle(GRAM.filter(g=>inCh(g)&&(gramTopic==="Alle"||g.topic===gramTopic))).slice(0,10); gi=0; score=0; renderGram();
+}
+function renderGram(){
+  if(gi>=gq.length) return renderDone(startGram,"Neue Runde");
+  const g=gq[gi];
+  const sent=esc(g.q).replace("___",`<span class="gap" id="gap">?</span>`);
+  stage.innerHTML=`<div class="card">${progress(gi,gq.length)}
+    <div class="top"><span class="label">${g.topic} · ${gi+1} / ${gq.length}</span></div>
+    <div class="sentence">${sent}</div>
+    ${g.type==="mc"?`<div class="btns">${shuffle(g.opts).map(o=>`<button class="btn" data-o="${esc(o)}">${esc(o)}</button>`).join("")}</div>`
+     :`<form id="tf" class="row" style="flex-wrap:nowrap"><input type="text" id="ti" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Antwort tippen" aria-label="Antwort"><button class="btn primary" style="flex:none">OK</button></form>`}
+    <div id="fb"></div></div>`;
+  const finish=(ans,btn)=>{
+    const ok=norm(ans)===norm(g.a); if(ok)score++;
+    $("#gap").textContent=g.a;
+    if(g.type==="mc") stage.querySelectorAll("[data-o]").forEach(x=>{x.disabled=true;if(x.dataset.o===g.a)x.classList.add("right");else if(x===btn)x.classList.add("wrong")});
+    else $("#ti").disabled=true;
+    say(g.q.replace("___",g.a).replace(/\(.*\)/,""));
+    $("#fb").innerHTML=`<div class="feedback ${ok?"ok":"no"}"><b>${ok?"Richtig!":"Richtig ist: "+esc(g.a)}</b>${esc(g.why)}</div>
+      <button class="btn primary" id="nx" style="margin-top:10px;width:100%">Weiter</button>`;
+    $("#nx").onclick=()=>{gi++;renderGram()}; $("#nx").focus();
+  };
+  if(g.type==="mc") stage.querySelectorAll("[data-o]").forEach(b=>b.onclick=()=>finish(b.dataset.o,b));
+  else{ $("#tf").onsubmit=e=>{e.preventDefault();const v=$("#ti").value;if(v.trim())finish(v)}; }
+}
+
+// ---------- WORD ORDER ----------
+let oq=[], oi=0;
+function startOrder(){oq=shuffle(ORDER.filter(inCh)).slice(0,8);oi=0;score=0;renderOrder()}
+function renderOrder(){
+  if(oi>=oq.length) return renderDone(startOrder,"Neue Runde");
+  const s=oq[oi]; const target=s.de.replace(/[.]$/,"").split(" ");
+  let pool=shuffle(target.map((w,i)=>({w,i}))), built=[];
+  stage.innerHTML=`<div class="card">${progress(oi,oq.length)}
+    <div class="top"><span class="label">Satz ${oi+1} / ${oq.length}</span><button class="speak" id="sp">▶ Hören</button></div>
+    <div class="sub">${esc(s.en)}</div>
+    <div class="tiles" id="built" aria-label="Dein Satz"></div>
+    <div class="tiles" id="pool" style="background:none;padding:0" aria-label="Wörter"></div>
+    <div class="btns"><button class="btn" id="clr">Löschen</button><button class="btn primary" id="chk">Prüfen</button></div>
+    <div id="fb"></div></div>`;
+  $("#sp").onclick=()=>say(s.de);
+  const draw=()=>{
+    $("#built").innerHTML=built.map((t,k)=>`<button class="tile" data-k="${k}">${esc(t.w)}</button>`).join("");
+    $("#pool").innerHTML=pool.map((t,k)=>`<button class="tile" data-p="${k}">${esc(t.w)}</button>`).join("");
+    stage.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{built.push(pool.splice(+b.dataset.p,1)[0]);draw()});
+    stage.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>{pool.push(built.splice(+b.dataset.k,1)[0]);draw()});
+  };
+  draw();
+  $("#clr").onclick=()=>{pool=pool.concat(built);built=[];draw()};
+  $("#chk").onclick=()=>{
+    if(pool.length) {$("#fb").innerHTML=`<div class="feedback no">Use all the words first.</div>`;return}
+    const ok=built.map(t=>t.w).join(" ")===target.join(" "); if(ok)score++;
+    const hasWeil=s.de.includes("weil");
+    $("#fb").innerHTML=`<div class="feedback ${ok?"ok":"no"}"><b>${ok?"Richtig!":"Richtig ist:"}</b>${esc(s.de)}<br>
+      <span class="sub">${hasWeil?"After weil, the conjugated verb goes to the end.":"The conjugated verb is always in position 2; the Partizip or infinitive goes to the end."}</span></div>
+      <button class="btn primary" id="nx" style="margin-top:10px;width:100%">Weiter</button>`;
+    $("#chk").disabled=$("#clr").disabled=true; stage.querySelectorAll(".tile").forEach(t=>t.disabled=true);
+    say(s.de); $("#nx").onclick=()=>{oi++;renderOrder()}; $("#nx").focus();
+  };
+}
+
+// ---------- SHARED ----------
+function renderDone(again,label){
+  const total=tab==="words"?session.length:tab==="gram"?gq.length:oq.length;
+  stage.innerHTML=`<div class="card done"><div class="label">Runde fertig</div>
+    <div class="word">${score} / ${total}</div>
+    <div class="sub">${score===total?"Super, alles richtig!":score>=total*.7?"Gut gemacht!":"Weiter üben, das wird!"}</div>
+    <button class="btn primary" id="again">${label}</button></div>`;
+  $("#again").onclick=again;
+}
+function renderBoxes(){
+  const pool=NOUNS.filter(inCh), c=[0,0,0,0,0];
+  pool.forEach(n=>c[boxOf(n)-1]++);
+  $("#boxes").innerHTML=c.map((v,i)=>`<div><strong>${v}</strong><small>Box ${i+1}</small></div>`).join("");
+  $("#stats").hidden=tab!=="words";
+}
+function start(){renderTopics();renderBoxes();({words:startWords,gram:startGram,order:startOrder})[tab]()}
+
+document.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{
+  tab=b.dataset.tab;
+  document.querySelectorAll(".tabs button").forEach(x=>x.setAttribute("aria-selected",x===b));
+  start();
+});
+$("#subtitle").textContent=`Kapitel ${CH_IDS.length>1?CH_IDS[0]+"–"+CH_IDS[CH_IDS.length-1]:CH_IDS[0]} · Wörter, Grammatik, Satzbau`;
+$("#chapters").insertAdjacentHTML("beforeend",CH_IDS.map(c=>`<button class="chip" data-ch="${c}">${c} · ${esc(CHAPTERS[c])}</button>`).join(""));
+document.querySelectorAll("#chapters [data-ch]").forEach(b=>{
+  b.setAttribute("aria-pressed",store.chapters.includes(+b.dataset.ch));
+  b.onclick=()=>{
+    const c=+b.dataset.ch; let s=new Set(store.chapters);
+    s.has(c)?s.delete(c):s.add(c); if(!s.size)s.add(c);
+    store.chapters=[...s]; save();
+    document.querySelectorAll("#chapters [data-ch]").forEach(x=>x.setAttribute("aria-pressed",store.chapters.includes(+x.dataset.ch)));
+    start();
+  };
+});
+start();
+</script>
+
+</body>
+</html>
