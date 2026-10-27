@@ -108,7 +108,8 @@ input[type=text]{font:1.15rem var(--body);padding:12px;border-radius:10px;border
 // To add a new week: add the chapter here, then add its items to NOUNS, GRAM and ORDER with that chapter number.
 const CHAPTERS = {
  1:"Und was machst du?",
- 2:"Nach der Schulzeit"
+ 2:"Nach der Schulzeit",
+ 3:"Immer online?"
 };
 
 // Nouns: [article, singular, plural ('' = no plural), English, chapter]
@@ -128,7 +129,17 @@ const NOUNS = [
  ["das","Gymnasium","die Gymnasien","academic secondary school",2],["das","Abitur","","school-leaving exam (for university)",2],
  ["der","Abschluss","die Abschlüsse","qualification, diploma",2],["die","Ausbildung","die Ausbildungen","vocational training",2],
  ["die","Erfahrung","die Erfahrungen","experience",2],["die","Erdkunde","","geography",2],["die","Geschichte","die Geschichten","history; story",2],
- ["die","Kunst","die Künste","art",2],["der","Sport","","sport, PE",2],["das","Lieblingsfach","die Lieblingsfächer","favourite subject",2]
+ ["die","Kunst","die Künste","art",2],["der","Sport","","sport, PE",2],["das","Lieblingsfach","die Lieblingsfächer","favourite subject",2],
+ ["das","Medium","die Medien","medium; (pl.) media",3],["der","Computer","die Computer","computer",3],["der","Laptop","die Laptops","laptop",3],
+ ["das","Handy","die Handys","mobile phone",3],["das","Smartphone","die Smartphones","smartphone",3],["das","Tablet","die Tablets","tablet",3],
+ ["die","Smartwatch","die Smartwatches","smartwatch",3],["die","Uhr","die Uhren","watch, clock",3],["das","Buch","die Bücher","book",3],
+ ["das","E-Book","die E-Books","e-book",3],["das","Radio","die Radios","radio",3],["der","Fernseher","die Fernseher","TV set",3],
+ ["die","Spielekonsole","die Spielekonsolen","games console",3],["die","VR-Brille","die VR-Brillen","VR headset",3],
+ ["die","Zeitung","die Zeitungen","newspaper",3],["die","Zeitschrift","die Zeitschriften","magazine",3],["der","Bildschirm","die Bildschirme","screen",3],
+ ["die","Nachricht","die Nachrichten","message; (pl.) the news",3],["die","E-Mail","die E-Mails","email",3],["die","Webseite","die Webseiten","web page",3],
+ ["der","Link","die Links","link",3],["die","Datei","die Dateien","file",3],["das","Rezept","die Rezepte","recipe",3],
+ ["das","Ticket","die Tickets","ticket",3],["die","Serie","die Serien","TV series",3],["der","Film","die Filme","film",3],
+ ["die","Information","die Informationen","information",3]
 ];
 
 // Grammar items. type: mc | type
@@ -170,7 +181,35 @@ const GRAM = [
  // Artikel Wiederholung (Akk/Dat)
  {ch:2,topic:"Artikel",type:"mc",q:"Ich habe ___ Prüfung bestanden.",opts:["die","der","den"],a:"die",why:"Akkusativ feminine stays die."},
  {ch:2,topic:"Artikel",type:"mc",q:"Nach ___ Unterricht gehe ich nach Hause.",opts:["dem","den","der"],a:"dem",why:"nach + Dativ; der Unterricht → dem."},
- {ch:2,topic:"Artikel",type:"mc",q:"Ich brauche ___ Stundenplan.",opts:["den","der","dem"],a:"den",why:"Akkusativ masculine: der → den."}
+ {ch:2,topic:"Artikel",type:"mc",q:"Ich brauche ___ Stundenplan.",opts:["den","der","dem"],a:"den",why:"Akkusativ masculine: der → den."},
+ // Komparativ
+ {ch:3,topic:"Komparativ",type:"mc",q:"Kauf doch ein Tablet. Das ist ___ als ein Laptop.",opts:["billiger","billig","mehr billig"],a:"billiger",why:"Komparativ = adjective + -er: billig → billiger. Never 'mehr billig'."},
+ {ch:3,topic:"Komparativ",type:"mc",q:"Ich trinke ___ Kaffee als Tee.",opts:["lieber","gerner","mehr gern"],a:"lieber",why:"gern is irregular: gern → lieber."},
+ {ch:3,topic:"Komparativ",type:"mc",q:"Der Film ist ___ als das Lied.",opts:["teurer","teuerer","mehr teuer"],a:"teurer",why:"teuer loses its e: teuer → teurer (like dunkel → dunkler)."},
+ {ch:3,topic:"Komparativ",type:"mc",q:"Der Eiffelturm ist ___ als der Kölner Dom.",opts:["höher","hocher","höcher"],a:"höher",why:"hoch is irregular: the c drops out → höher."},
+ {ch:3,topic:"Komparativ",type:"type",q:"Ein Tablet ist viel ___ als ein Laptop. (leicht)",a:"leichter",why:"leicht + -er → leichter."},
+ {ch:3,topic:"Komparativ",type:"type",q:"Auf dem Laptop kann man aber ___ schreiben. (gut)",a:"besser",why:"gut is irregular: gut → besser."},
+ {ch:3,topic:"Komparativ",type:"type",q:"Ein Laptop kostet ___ als ein Tablet. (viel)",a:"mehr",why:"viel is irregular: viel → mehr."},
+ {ch:3,topic:"Komparativ",type:"type",q:"Der Bildschirm ist ___ . (groß)",a:"größer",why:"Short adjectives with a, o, u often take an Umlaut: groß → größer."},
+ {ch:3,topic:"Komparativ",type:"type",q:"Meine Oma ist ___ als meine Mutter. (alt)",a:"älter",why:"Umlaut: alt → älter."},
+ {ch:3,topic:"Komparativ",type:"type",q:"Dana arbeitet ___ als Maria. (lang)",a:"länger",why:"Umlaut: lang → länger."},
+ {ch:3,topic:"Komparativ",type:"type",q:"Obst ist ___ als Schokolade. (gesund)",a:"gesünder",why:"Umlaut: gesund → gesünder."},
+ {ch:3,topic:"Komparativ",type:"type",q:"Das Auto ist ___ als das Fahrrad. (schnell)",a:"schneller",why:"schnell + -er → schneller. Watch the spelling: schn-e-ll-er."},
+ // als oder wie
+ {ch:3,topic:"als oder wie",type:"mc",q:"Die Smartwatch ist so groß ___ die Uhr.",opts:["wie","als"],a:"wie",why:"Same → so + adjective + wie."},
+ {ch:3,topic:"als oder wie",type:"mc",q:"Das Handy ist älter ___ das Smartphone.",opts:["als","wie"],a:"als",why:"Different → Komparativ + als."},
+ {ch:3,topic:"als oder wie",type:"mc",q:"Ein E-Book-Reader ist nicht so teuer ___ ein Tablet.",opts:["wie","als"],a:"wie",why:"nicht so … wie: the base form with wie."},
+ {ch:3,topic:"als oder wie",type:"mc",q:"Der Laptop ist kleiner ___ der Fernseher.",opts:["als","wie"],a:"als",why:"kleiner is a Komparativ → als."},
+ {ch:3,topic:"als oder wie",type:"mc",q:"Der Laptop ist genauso praktisch ___ das Tablet.",opts:["wie","als"],a:"wie",why:"(genau)so … wie = just as … as."},
+ {ch:3,topic:"als oder wie",type:"mc",q:"Pablo feiert nicht so ___ wie Eleni.",opts:["häufig","häufiger"],a:"häufig",why:"After so, use the base form: so häufig wie (not so häufiger)."},
+ {ch:3,topic:"als oder wie",type:"mc",q:"Bananen sind nicht so ___ wie Schokolade.",opts:["süß","süßer"],a:"süß",why:"so + base form + wie."},
+ {ch:3,topic:"als oder wie",type:"mc",q:"Berlin ist schöner ___ Frankfurt.",opts:["als","wie"],a:"als",why:"schöner is a Komparativ → als."},
+ // Medien-Verben
+ {ch:3,topic:"Medien-Verben",type:"type",q:"___ du manchmal etwas? (posten)",a:"Postest",why:"Stem ends in -t, so add an e: du postest."},
+ {ch:3,topic:"Medien-Verben",type:"type",q:"Er ___ über seine Reisen. (bloggen)",a:"bloggt",why:"English verbs get normal German endings: er bloggt."},
+ {ch:3,topic:"Medien-Verben",type:"type",q:"Ich habe Ihnen die Informationen ___ . (mailen)",a:"gemailt",why:"Regular Perfekt: ge- + mail + -t."},
+ {ch:3,topic:"Medien-Verben",type:"type",q:"Sie ___ jeden Abend mit ihrer Freundin. (chatten)",a:"chattet",why:"Stem ends in -t, so add an e: sie chattet."},
+ {ch:3,topic:"Medien-Verben",type:"type",q:"Hast du das Foto schon ___ ? (posten)",a:"gepostet",why:"Stem ends in -t: ge- + post + -et."}
 ];
 
 // Word order: correct sentence as tokens; comma kept with the token before
@@ -186,7 +225,15 @@ const ORDER = [
  {ch:2,de:"Früher musste ich um sieben Uhr aufstehen.",en:"I used to have to get up at seven."},
  {ch:2,de:"Als Kind konnte ich nicht gut schwimmen.",en:"As a child I couldn't swim well."},
  {ch:2,de:"Ich habe mit meiner Lehrerin gesprochen.",en:"I spoke with my teacher."},
- {ch:2,de:"Er war froh, weil er das Abitur bestanden hat.",en:"He was happy because he passed the Abitur."}
+ {ch:2,de:"Er war froh, weil er das Abitur bestanden hat.",en:"He was happy because he passed the Abitur."},
+ {ch:3,de:"Ein Tablet ist leichter als ein Laptop.",en:"A tablet is lighter than a laptop."},
+ {ch:3,de:"Ich arbeite lieber mit einem Laptop.",en:"I prefer working with a laptop."},
+ {ch:3,de:"Die Smartwatch ist so groß wie die Uhr.",en:"The smartwatch is as big as the watch."},
+ {ch:3,de:"Ein E-Book-Reader ist nicht so teuer wie ein Tablet.",en:"An e-reader isn't as expensive as a tablet."},
+ {ch:3,de:"Ich trinke lieber Kaffee als Tee.",en:"I prefer coffee to tea."},
+ {ch:3,de:"Meine Oma ist älter als meine Mutter.",en:"My grandma is older than my mother."},
+ {ch:3,de:"Abends sehe ich oft Serien auf dem Handy.",en:"In the evening I often watch series on my phone."},
+ {ch:3,de:"Gestern habe ich Informationen im Internet recherchiert.",en:"Yesterday I researched information online."}
 ];
 
 // ---------- STATE ----------
@@ -312,7 +359,7 @@ function renderOrder(){
     const ok=built.map(t=>t.w).join(" ")===target.join(" "); if(ok)score++;
     const hasWeil=s.de.includes("weil");
     $("#fb").innerHTML=`<div class="feedback ${ok?"ok":"no"}"><b>${ok?"Richtig!":"Richtig ist:"}</b>${esc(s.de)}<br>
-      <span class="sub">${hasWeil?"After weil, the conjugated verb goes to the end.":"The conjugated verb is always in position 2; the Partizip or infinitive goes to the end."}</span></div>
+      <span class="sub">${hasWeil?"After weil, the conjugated verb goes to the end.":/ (als|wie) /.test(s.de)?"Verb in position 2; als or wie and the thing you compare with come at the end.":"The conjugated verb is always in position 2; the Partizip or infinitive goes to the end."}</span></div>
       <button class="btn primary" id="nx" style="margin-top:10px;width:100%">Weiter</button>`;
     $("#chk").disabled=$("#clr").disabled=true; stage.querySelectorAll(".tile").forEach(t=>t.disabled=true);
     say(s.de); $("#nx").onclick=()=>{oi++;renderOrder()}; $("#nx").focus();
