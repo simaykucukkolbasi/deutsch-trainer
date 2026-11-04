@@ -109,7 +109,8 @@ input[type=text]{font:1.15rem var(--body);padding:12px;border-radius:10px;border
 const CHAPTERS = {
  1:"Und was machst du?",
  2:"Nach der Schulzeit",
- 3:"Immer online?"
+ 3:"Immer online?",
+ 4:"Große und kleine Gefühle"
 };
 
 // Nouns: [article, singular, plural ('' = no plural), English, chapter]
@@ -139,7 +140,26 @@ const NOUNS = [
  ["die","Nachricht","die Nachrichten","message; (pl.) the news",3],["die","E-Mail","die E-Mails","email",3],["die","Webseite","die Webseiten","web page",3],
  ["der","Link","die Links","link",3],["die","Datei","die Dateien","file",3],["das","Rezept","die Rezepte","recipe",3],
  ["das","Ticket","die Tickets","ticket",3],["die","Serie","die Serien","TV series",3],["der","Film","die Filme","film",3],
- ["die","Information","die Informationen","information",3]
+ ["die","Information","die Informationen","information",3],
+ ["die","Meinung","die Meinungen","opinion",3],["der","Vorteil","die Vorteile","advantage",3],["der","Nachteil","die Nachteile","disadvantage",3],
+ ["der","Kommentar","die Kommentare","comment",3],["das","Interview","die Interviews","interview",3],["das","Foto","die Fotos","photo",3],
+ ["das","Video","die Videos","video",3],["der","Enkel","die Enkel","grandson",3],["die","Umfrage","die Umfragen","survey",3],
+ ["das","Projekt","die Projekte","project",3],["die","App","die Apps","app",3],["die","Idee","die Ideen","idea",3],
+ ["der","Fotograf","die Fotografen","photographer",3],["das","Tier","die Tiere","animal",3],["die","Party","die Partys","party",3],
+ ["die","Chefin","die Chefinnen","boss (f)",3],["die","Zeitverschwendung","","waste of time",3],
+ ["das","Gefühl","die Gefühle","feeling",4],["die","Angst","die Ängste","fear",4],["die","Laune","die Launen","mood",4],
+ ["das","Glück","","happiness; luck",4],["das","Ereignis","die Ereignisse","event",4],["die","Veranstaltung","die Veranstaltungen","event, function",4],
+ ["das","Fest","die Feste","celebration, festival",4],["die","Feier","die Feiern","party, celebration",4],["die","Hochzeit","die Hochzeiten","wedding",4],
+ ["das","Paar","die Paare","couple",4],["das","Brautpaar","die Brautpaare","bride and groom",4],["das","Brautkleid","die Brautkleider","wedding dress",4],
+ ["der","Ring","die Ringe","ring",4],["der","Geburtstag","die Geburtstage","birthday",4],["das","Geschenk","die Geschenke","present",4],
+ ["die","Blume","die Blumen","flower",4],["die","Einladung","die Einladungen","invitation",4],["die","Absage","die Absagen","refusal, cancellation",4],
+ ["der","Glückwunsch","die Glückwünsche","congratulations",4],["die","Glückwunschkarte","die Glückwunschkarten","greetings card",4],
+ ["der","Dank","","thanks",4],["die","Zukunft","","future",4],["die","Überraschung","die Überraschungen","surprise",4],
+ ["die","Firma","die Firmen","company",4],["der","Kollege","die Kollegen","colleague (m)",4],["das","Gebäck","","pastries, biscuits",4],
+ ["die","Schultüte","die Schultüten","school cone (first day of school)",4],["der","Schulranzen","die Schulranzen","school backpack",4],
+ ["die","Geburt","die Geburten","birth",4],["das","Baby","die Babys","baby",4],["der","Storch","die Störche","stork",4],
+ ["die","Medaille","die Medaillen","medal",4],["die","Siegerin","die Siegerinnen","winner (f)",4],["der","Marathon","die Marathons","marathon",4],
+ ["der","Führerschein","die Führerscheine","driving licence",4],["das","Fieber","","fever",4]
 ];
 
 // Grammar items. type: mc | type
@@ -209,7 +229,54 @@ const GRAM = [
  {ch:3,topic:"Medien-Verben",type:"type",q:"Er ___ über seine Reisen. (bloggen)",a:"bloggt",why:"English verbs get normal German endings: er bloggt."},
  {ch:3,topic:"Medien-Verben",type:"type",q:"Ich habe Ihnen die Informationen ___ . (mailen)",a:"gemailt",why:"Regular Perfekt: ge- + mail + -t."},
  {ch:3,topic:"Medien-Verben",type:"type",q:"Sie ___ jeden Abend mit ihrer Freundin. (chatten)",a:"chattet",why:"Stem ends in -t, so add an e: sie chattet."},
- {ch:3,topic:"Medien-Verben",type:"type",q:"Hast du das Foto schon ___ ? (posten)",a:"gepostet",why:"Stem ends in -t: ge- + post + -et."}
+ {ch:3,topic:"Medien-Verben",type:"type",q:"Hast du das Foto schon ___ ? (posten)",a:"gepostet",why:"Stem ends in -t: ge- + post + -et."},
+ // Superlativ
+ {ch:3,topic:"Superlativ",type:"mc",q:"Wer singt ___ ?",opts:["am schönsten","am schöner","am schönen"],a:"am schönsten",why:"Superlativ: am + adjective + -sten."},
+ {ch:3,topic:"Superlativ",type:"mc",q:"Welcher Weg ist ___ ?",opts:["am kürzesten","am kürzsten","am kurzsten"],a:"am kürzesten",why:"After -z, -s, -ß, -t, -d add an e: kurz → am kürzesten."},
+ {ch:3,topic:"Superlativ",type:"type",q:"Was gefällt ihm im Beruf ___ ? (gut)",a:"am besten",why:"gut → besser → am besten."},
+ {ch:3,topic:"Superlativ",type:"type",q:"Ich bin ___ draußen in der Natur. (gern)",a:"am liebsten",why:"gern → lieber → am liebsten."},
+ {ch:3,topic:"Superlativ",type:"type",q:"Wer lernt am Wochenende ___ ? (viel)",a:"am meisten",why:"viel → mehr → am meisten."},
+ {ch:3,topic:"Superlativ",type:"type",q:"Wer wohnt ___ zur Sprachschule? (nah)",a:"am nächsten",why:"nah → näher → am nächsten (irregular)."},
+ {ch:3,topic:"Superlativ",type:"type",q:"Meine Professorin finde ich ___ . (interessant)",a:"am interessantesten",why:"Ends in -t, so add an e: am interessantesten."},
+ {ch:3,topic:"Superlativ",type:"type",q:"Menschen helfen, das finde ich ___ . (wichtig)",a:"am wichtigsten",why:"wichtig → am wichtigsten."},
+ {ch:3,topic:"Superlativ",type:"type",q:"Dann bin ich selbst ___ ! (glücklich)",a:"am glücklichsten",why:"glücklich → am glücklichsten."},
+ {ch:3,topic:"Superlativ",type:"type",q:"Wer tippt ___ Nachrichten auf dem Handy? (schnell)",a:"am schnellsten",why:"schnell → am schnellsten."},
+ {ch:3,topic:"Superlativ",type:"type",q:"Wer kommt immer ___ zum Kurs? (früh)",a:"am frühesten",why:"früh → am frühesten (an extra e makes it easier to say)."},
+ // Nebensatz mit dass
+ {ch:3,topic:"dass-Sätze",type:"type",q:"Ich finde es sehr gut, dass man immer Kontakt mit Freunden ___ . (haben)",a:"hat",why:"In a dass-clause the conjugated verb goes to the end."},
+ {ch:3,topic:"dass-Sätze",type:"type",q:"Meinen Freunden hat gefallen, dass ich Fotos vom Konzert gepostet ___ . (haben)",a:"habe",why:"Perfekt in a dass-clause: Partizip, then haben/sein last."},
+ {ch:3,topic:"dass-Sätze",type:"type",q:"Ich mag es, dass ich alles mit meinen Freunden teilen ___ . (können)",a:"kann",why:"Modal verb in a dass-clause: infinitive, then the modal last."},
+ {ch:3,topic:"dass-Sätze",type:"type",q:"Ich möchte, dass sie mich ___ . (anrufen)",a:"anruft",why:"Separable verbs join together at the end: anruft."},
+ {ch:3,topic:"dass-Sätze",type:"type",q:"Carla sagt, dass Handys praktisch ___ . (sein)",a:"sind",why:"Verb at the end: … dass Handys praktisch sind."},
+ {ch:3,topic:"dass-Sätze",type:"type",q:"Er hat vergessen, dass seine Chefin das Foto sehen ___ . (können)",a:"kann",why:"Modal verb last: sehen kann."},
+ {ch:3,topic:"dass-Sätze",type:"mc",q:"Ich finde, dass ___ .",opts:["das Posten praktisch ist","das Posten ist praktisch","ist das Posten praktisch"],a:"das Posten praktisch ist",why:"dass + subject … verb at the end."},
+ {ch:3,topic:"dass-Sätze",type:"mc",q:"Ich denke, dass die Leute vorsichtiger ___ .",opts:["sein sollen","sollen sein"],a:"sein sollen",why:"Infinitive first, then the conjugated modal at the very end."},
+ // Nebensatz mit wenn
+ {ch:4,topic:"wenn-Sätze",type:"type",q:"Wenn ich Zeit ___ , gehe ich ins Kino. (haben)",a:"habe",why:"In the wenn-clause the verb goes to the end."},
+ {ch:4,topic:"wenn-Sätze",type:"type",q:"Ich bin froh, wenn eine Freundin ___ . (mitkommen)",a:"mitkommt",why:"Separable verb joins together at the end: mitkommt."},
+ {ch:4,topic:"wenn-Sätze",type:"type",q:"Ich gehe in ein Restaurant, wenn ich nicht zu müde ___ . (sein)",a:"bin",why:"Verb at the end of the wenn-clause."},
+ {ch:4,topic:"wenn-Sätze",type:"type",q:"Wenn es nicht ___ , fahre ich mit dem Rad nach Hause. (regnen)",a:"regnet",why:"Stem ends in -n after a consonant, so add an e: es regnet."},
+ {ch:4,topic:"wenn-Sätze",type:"type",q:"Lernen wir zusammen? – Ja, wenn ich nicht arbeiten ___ . (müssen)",a:"muss",why:"Modal last: arbeiten muss."},
+ {ch:4,topic:"wenn-Sätze",type:"type",q:"Holst du mich ab? – Ja, wenn ich das Auto von Tom haben ___ . (können)",a:"kann",why:"Modal last: haben kann."},
+ {ch:4,topic:"wenn-Sätze",type:"mc",q:"Wenn ich Zeit habe, ___ Sport.",opts:["mache ich","ich mache"],a:"mache ich",why:"The wenn-clause is position 1, so the main clause starts with its verb: verb, verb."},
+ {ch:4,topic:"wenn-Sätze",type:"mc",q:"Wenn es regnet oder schneit, ___ ins Fitness-Studio.",opts:["gehe ich","ich gehe"],a:"gehe ich",why:"After the wenn-clause: verb first, then subject."},
+ {ch:4,topic:"wenn-Sätze",type:"mc",q:"Wenn ich einen Horrorfilm sehe, ___ ich Angst.",opts:["habe","bin"],a:"habe",why:"Angst haben: ich habe Angst."},
+ {ch:4,topic:"wenn-Sätze",type:"mc",q:"Ich gehe joggen, wenn das Wetter schön ___ .",opts:["ist","sein","ist es"],a:"ist",why:"Verb at the end of the wenn-clause."},
+ // weil, dass oder wenn
+ {ch:4,topic:"weil, dass, wenn",type:"mc",q:"Felix sagt, ___ er nie Angst hat.",opts:["dass","weil","wenn"],a:"dass",why:"sagen, dass … reports what someone says."},
+ {ch:4,topic:"weil, dass, wenn",type:"mc",q:"Er ist traurig, ___ Mona ihn nicht angerufen hat.",opts:["weil","dass","wenn"],a:"weil",why:"weil gives the reason."},
+ {ch:4,topic:"weil, dass, wenn",type:"mc",q:"___ er traurig ist, spricht er immer mit einem Freund.",opts:["Wenn","Dass","Weil"],a:"Wenn",why:"wenn = whenever / if (a condition or repeated situation)."},
+ {ch:4,topic:"weil, dass, wenn",type:"mc",q:"Felix hofft, ___ er die Prüfung besteht.",opts:["dass","wenn","weil"],a:"dass",why:"hoffen, dass … what he hopes."},
+ {ch:4,topic:"weil, dass, wenn",type:"mc",q:"Was macht Felix, ___ er es nicht schafft?",opts:["wenn","dass","weil"],a:"wenn",why:"What does he do IF he fails? A condition → wenn."},
+ {ch:4,topic:"weil, dass, wenn",type:"mc",q:"Leider können wir nicht kommen, ___ wir im Urlaub sind.",opts:["weil","wenn","dass"],a:"weil",why:"The reason why they can't come → weil."},
+ {ch:4,topic:"weil, dass, wenn",type:"mc",q:"Wir wünschen euch, ___ ihr immer glücklich seid.",opts:["dass","wenn","weil"],a:"dass",why:"wünschen, dass … what they wish."},
+ // Glückwünsche
+ {ch:4,topic:"Glückwünsche",type:"mc",q:"Liebe Nelli, ___ für die Einladung zu deinem Geburtstag.",opts:["herzlichen Dank","viel Spaß","Für die Zukunft"],a:"herzlichen Dank",why:"Thanking someone: Herzlichen Dank / Tausend Dank für …"},
+ {ch:4,topic:"Glückwünsche",type:"mc",q:"Alles Gute zu deinem Geburtstag und ___ !",opts:["viel Spaß","herzlichen Dank","Hochzeit"],a:"viel Spaß",why:"Viel Spaß! = Have fun!"},
+ {ch:4,topic:"Glückwünsche",type:"mc",q:"Wir gratulieren euch herzlich zu eurer ___ !",opts:["Hochzeit","Zukunft","Spaß"],a:"Hochzeit",why:"gratulieren zu + Dativ: zu eurer Hochzeit."},
+ {ch:4,topic:"Glückwünsche",type:"mc",q:"___ wünschen wir euch viel Glück.",opts:["Für die Zukunft","Alles Gute","Herzlichen Dank"],a:"Für die Zukunft",why:"Für die Zukunft wünschen wir euch … (verb in position 2)."},
+ {ch:4,topic:"Glückwünsche",type:"mc",q:"Herzlichen Glückwunsch ___ Hochzeit!",opts:["zur","für die","an die"],a:"zur",why:"Glückwunsch zu + Dativ: zu der → zur Hochzeit."},
+ {ch:4,topic:"Glückwünsche",type:"mc",q:"Ich ___ dir zum Geburtstag!",opts:["gratuliere","gratulierst","bedanke"],a:"gratuliere",why:"jemandem gratulieren: ich gratuliere dir."}
 ];
 
 // Word order: correct sentence as tokens; comma kept with the token before
@@ -233,7 +300,22 @@ const ORDER = [
  {ch:3,de:"Ich trinke lieber Kaffee als Tee.",en:"I prefer coffee to tea."},
  {ch:3,de:"Meine Oma ist älter als meine Mutter.",en:"My grandma is older than my mother."},
  {ch:3,de:"Abends sehe ich oft Serien auf dem Handy.",en:"In the evening I often watch series on my phone."},
- {ch:3,de:"Gestern habe ich Informationen im Internet recherchiert.",en:"Yesterday I researched information online."}
+ {ch:3,de:"Gestern habe ich Informationen im Internet recherchiert.",en:"Yesterday I researched information online."},
+ {ch:3,de:"Am liebsten bin ich draußen in der Natur.",en:"I like being outdoors in nature most of all."},
+ {ch:3,de:"Was gefällt dir im Beruf am besten?",en:"What do you like best about your job?"},
+ {ch:3,de:"Ich finde, dass das Posten praktisch ist.",en:"I think posting is practical."},
+ {ch:3,de:"Ich mag es, dass ich alles sofort teilen kann.",en:"I like that I can share everything straight away."},
+ {ch:3,de:"Carla sagt, dass Handys praktisch sind.",en:"Carla says that mobile phones are practical."},
+ {ch:3,de:"Ich möchte, dass sie mich anruft.",en:"I'd like her to call me."},
+ {ch:4,de:"Wenn ich Zeit habe, mache ich Sport.",en:"When I have time, I do sport."},
+ {ch:4,de:"Ich gehe joggen, wenn das Wetter schön ist.",en:"I go jogging when the weather is nice."},
+ {ch:4,de:"Wenn es regnet, gehe ich ins Fitness-Studio.",en:"When it rains, I go to the gym."},
+ {ch:4,de:"Ich bin nervös, wenn ich eine Prüfung habe.",en:"I'm nervous when I have an exam."},
+ {ch:4,de:"Wenn die Sonne scheint, gehe ich spazieren.",en:"When the sun shines, I go for a walk."},
+ {ch:4,de:"Wenn ich Fieber habe, gehe ich zum Arzt.",en:"When I have a fever, I go to the doctor."},
+ {ch:4,de:"Wenn ich Geld brauche, gehe ich zur Bank.",en:"When I need money, I go to the bank."},
+ {ch:4,de:"Ich bin glücklich, wenn ich mit Freunden feiern kann.",en:"I'm happy when I can celebrate with friends."},
+ {ch:4,de:"Wir wünschen euch, dass ihr immer glücklich seid.",en:"We wish you that you will always be happy."}
 ];
 
 // ---------- STATE ----------
@@ -357,9 +439,9 @@ function renderOrder(){
   $("#chk").onclick=()=>{
     if(pool.length) {$("#fb").innerHTML=`<div class="feedback no">Use all the words first.</div>`;return}
     const ok=built.map(t=>t.w).join(" ")===target.join(" "); if(ok)score++;
-    const hasWeil=s.de.includes("weil");
+    const sub=(s.de.match(/\b(weil|dass|wenn)\b/i)||[])[1];
     $("#fb").innerHTML=`<div class="feedback ${ok?"ok":"no"}"><b>${ok?"Richtig!":"Richtig ist:"}</b>${esc(s.de)}<br>
-      <span class="sub">${hasWeil?"After weil, the conjugated verb goes to the end.":/ (als|wie) /.test(s.de)?"Verb in position 2; als or wie and the thing you compare with come at the end.":"The conjugated verb is always in position 2; the Partizip or infinitive goes to the end."}</span></div>
+      <span class="sub">${/^Wenn /.test(s.de)?"The wenn-clause sends its verb to the end and counts as position 1, so the main clause starts with its verb: … habe, mache ich …":sub?`After ${sub}, the conjugated verb goes to the end.`:/ (als|wie) /.test(s.de)?"Verb in position 2; als or wie and the thing you compare with come at the end.":"The conjugated verb is always in position 2; the Partizip or infinitive goes to the end."}</span></div>
       <button class="btn primary" id="nx" style="margin-top:10px;width:100%">Weiter</button>`;
     $("#chk").disabled=$("#clr").disabled=true; stage.querySelectorAll(".tile").forEach(t=>t.disabled=true);
     say(s.de); $("#nx").onclick=()=>{oi++;renderOrder()}; $("#nx").focus();
